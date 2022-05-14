@@ -11,6 +11,7 @@ top10 <-
   
 ggplot(top10, aes(x = reorder(item, -total), y = total, fill = total)) +
   geom_bar(stat = 'identity') +
+  coord_cartesian(ylim = c(315,410)) +
   scale_x_discrete(guide = guide_axis(n.dodge=3)) +
   xlab("banned dress item") + 
   ylab("number of schools") + 
