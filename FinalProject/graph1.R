@@ -9,7 +9,7 @@ top10 <-
   arrange(desc(total)) %>%
   slice(1:10)
   
-ggplot(top10, aes(x = reorder(item, -total), y = total)) +
+ggplot(top10, aes(x = reorder(item, -total), y = total, fill = total)) +
   geom_bar(stat = 'identity') +
   scale_x_discrete(guide = guide_axis(n.dodge=3)) +
   xlab("banned dress item") + 
