@@ -1,0 +1,134 @@
+---
+title: "Exploratory Analysis"
+author: "Group AB"
+date: '2022-05-16'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+## Summary Information
+
+```{r, echo=FALSE}
+library(tidyverse)
+
+banned_items <- read.csv("https://raw.githubusercontent.com/the-pudding/data/master/dress-codes/banned_items.csv", stringsAsFactors = FALSE)
+
+clothes_percentages <- read.csv("https://raw.githubusercontent.com/the-pudding/data/master/dress-codes/clothes_percentages.csv", stringsAsFactors = FALSE)
+
+body_percentages <- read.csv("https://raw.githubusercontent.com/the-pudding/data/master/dress-codes/body_percentages.csv", stringsAsFactors = FALSE)
+
+clothes_details <- read.csv("https://raw.githubusercontent.com/the-pudding/data/master/dress-codes/clothesDetails.csv", stringsAsFactors = FALSE)
+
+words_percentages <- read.csv("https://raw.githubusercontent.com/the-pudding/data/master/dress-codes/words_percentages.csv", stringsAsFactors = FALSE)
+
+male_percentage_top_banned_item <- 
+  nrow(clothes_percentages %>% 
+         filter(market == "m")) / nrow(clothes_percentages)
+
+female_percentage_top_banned_item <- 
+  nrow(clothes_percentages %>% 
+         filter(market == "f")) / nrow(clothes_percentages)
+
+nongender_percentage_top_banned_item <- 
+  nrow(clothes_percentages %>% 
+         filter(market == "n")) / nrow(clothes_percentages)
+
+summary_info <- list()
+summary_info$most_banned_item <- banned_items %>% 
+  group_by(item) %>% 
+  summarise(frequency = n()) %>% 
+  filter(frequency == max(frequency, na.rm = TRUE)) %>% 
+  pull(item)
+
+summary_info$female_percentage_top_banned_item <- 
+  nrow(clothes_percentages %>% 
+         filter(market == "f")) / nrow(clothes_percentages)
+
+summary_info$male_percentage_top_banned_item <- 
+  nrow(clothes_percentages %>% 
+         filter(market == "m")) / nrow(clothes_percentages)
+
+summary_info$nongender_percentage_top_banned_item <- 
+  nrow(clothes_percentages %>% 
+         filter(market == "n")) / nrow(clothes_percentages)
+
+summary_info$female_banned <- female_percentage_top_banned_item + nongender_percentage_top_banned_item
+
+summary_info$male_banned <- male_percentage_top_banned_item + nongender_percentage_top_banned_item
+
+summary_info$most_banned_body_part <- body_percentages %>% 
+  filter(n == max(n, na.rm = TRUE)) %>% 
+  pull(item)
+
+summary_info$most_used_word_rationale <- words_percentages %>% 
+  filter(n == max(n, na.rm = TRUE)) %>% 
+  pull(display)
+```
+
+## Chart 1
+```{r, echo=FALSE}
+# Percentage of schools for each of the top 10 banned items
+library(tidyverse)
+# Percentage of schools for each of the top 10 banned items
+
+banned_items_db <- read.csv("https://raw.githubusercontent.com/the-pudding/data/master/dress-codes/banned_items.csv", stringsAsFactors = FALSE)
+
+top10 <-
+  banned_items_db %>%
+  group_by(item) %>%
+  summarise(total = n()) %>%
+  arrange(desc(total)) %>%
+  slice(1:10)
+  
+ggplot(top10, aes(x = reorder(item, -total), y = total, fill = item)) +
+  geom_bar(stat = 'identity') +
+  coord_cartesian(ylim = c(315,410)) +
+  scale_x_discrete(guide = guide_axis(n.dodge=3)) +
+  xlab("banned dress item") + 
+  ylab("number of schools") + 
+  ggtitle("Top 10 most frequently banned dress items")
+```
+
+## Chart 2
+```{r, echo=FALSE}
+# Word cloud for different banned items
+
+library("ggwordcloud")
+
+words_percentages_db <- read.csv("https://raw.githubusercontent.com/the-pudding/data/master/dress-codes/words_percentages.csv")
+
+ggplot(words_percentages_db, aes(label = item, size = percent)) +
+  geom_text_wordcloud(area_corr = TRUE) + 
+  scale_radius(range = c(0, 20), limits = c(0, NA)) +
+  ggtitle("Word cloud of most used words to describe banned clothing items")
+```
+
+## Chart 3
+```{r, echo=FALSE}
+# Treemap comparing banned items between genders
+
+library("treemapify")
+
+banned_items_gender_db <- read.csv("https://raw.githubusercontent.com/the-pudding/data/master/dress-codes/clothes_percentages.csv", stringsAsFactors = FALSE)
+
+by_gender <-
+  banned_items_gender_db %>%
+  group_by(market) %>%
+  summarize(total = n())
+
+ggplot(by_gender, aes(area = total, fill = market, label = market)) +
+  geom_treemap() + 
+  geom_treemap_text(fontface = "italic", colour = "white", place = "centre", size = 50) + 
+  ggtitle("Treemap showing proportion between banned male, female, and non-gendered \nclothing items")
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
