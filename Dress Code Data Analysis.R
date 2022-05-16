@@ -12,10 +12,14 @@ clothes_details <- read.csv("https://raw.githubusercontent.com/the-pudding/data/
 words_percentages <- read.csv("https://raw.githubusercontent.com/the-pudding/data/master/dress-codes/words_percentages.csv", stringsAsFactors = FALSE)
 
 # What is the most banned item? 
-most_banned_item <- clothes_percentages %>% 
-  filter(n == max(n, na.rm = TRUE)) %>% 
-  pull(slug)
+banned_item_frequency <- banned_items %>% 
+  group_by(item) %>% 
+  summarise(frequency = n())
 
+most_banned_item <- banned_item_frequency %>% 
+  filter(frequency == max(frequency)) %>% 
+  pull(item)
+  
 # What is the gender that the most banned item is typically marketed to? 
 most_banned_item_marketed <- clothes_percentages %>% 
   filter(n == max(n, na.rm = TRUE)) %>% 
