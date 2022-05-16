@@ -17,7 +17,7 @@ banned_item_frequency <- banned_items %>%
   summarise(frequency = n())
 
 most_banned_item <- banned_item_frequency %>% 
-  filter(frequency == max(frequency)) %>% 
+  filter(frequency == max(frequency, na.rm = TRUE)) %>% 
   pull(item)
   
 # What is the gender that the most banned item is typically marketed to? 
@@ -26,14 +26,17 @@ most_banned_item_marketed <- clothes_percentages %>%
   pull(market)
 
 # What percentage of top banned item is marketed to female or male, or non-gender?
-female_percentage_top_banned_item <- nrow(clothes_percentages %>% 
-  filter(market == "f")) / nrow(clothes_percentages)
+female_percentage_top_banned_item <- 
+  nrow(clothes_percentages %>% 
+         filter(market == "f")) / nrow(clothes_percentages)
 
-male_percentage_top_banned_item <- nrow(clothes_percentages %>% 
-                                          filter(market == "m")) / nrow(clothes_percentages)
+male_percentage_top_banned_item <- 
+  nrow(clothes_percentages %>% 
+         filter(market == "m")) / nrow(clothes_percentages)
 
-nongender_percentage_top_banned_item <- nrow(clothes_percentages %>% 
-                                           filter(market == "n")) / nrow(clothes_percentages)
+nongender_percentage_top_banned_item <- 
+  nrow(clothes_percentages %>% 
+         filter(market == "n")) / nrow(clothes_percentages)
 
 # What is the percentage of items that female students are banned to wear, 
 # and what is the percentage of items that male students are banned to wear
