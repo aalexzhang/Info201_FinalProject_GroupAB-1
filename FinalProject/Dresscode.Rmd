@@ -106,6 +106,8 @@ summary_info$most_used_word_rationale <- words_percentages %>%
 
 ## Table
 
+We included the table because it shows all the unique banned items and how many schools banned each of the item. The table reveals some of the top banned items.
+
 ```{r, echo=FALSE}
 library(tidyverse)
 
