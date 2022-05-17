@@ -9,15 +9,9 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
 ## Summary Information
 
-```{r, echo=FALSE}
+```{r,warning=FALSE, message=FALSE,  echo=FALSE}
 library(tidyverse)
 
 banned_items <- read.csv("https://raw.githubusercontent.com/the-pudding/data/master/dress-codes/banned_items.csv", stringsAsFactors = FALSE)
@@ -72,6 +66,8 @@ summary_info$most_banned_body_part <- body_percentages %>%
 summary_info$most_used_word_rationale <- words_percentages %>% 
   filter(n == max(n, na.rm = TRUE)) %>% 
   pull(display)
+
+summary_info
 ```
 
 ## Chart 1
