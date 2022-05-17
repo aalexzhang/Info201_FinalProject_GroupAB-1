@@ -4,4 +4,7 @@ banned_items <- read.csv("https://raw.githubusercontent.com/the-pudding/data/mas
 
 banned_item_frequency <- banned_items %>% 
   group_by(item) %>% 
-  summarise(how_many_schools_banned_this_item = n())
+  summarise(how_many_schools_banned_this_item = n()) %>%
+  arrange(desc(how_many_schools_banned_this_item)) %>%
+  slice(1:50)
+view(banned_item_frequency)

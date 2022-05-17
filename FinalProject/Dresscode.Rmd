@@ -66,11 +66,27 @@ summary_info$most_banned_body_part <- body_percentages %>%
 summary_info$most_used_word_rationale <- words_percentages %>% 
   filter(n == max(n, na.rm = TRUE)) %>% 
   pull(display)
-
 summary_info
 ```
 
+## Table
+```{r, echo=FALSE}
+library(tidyverse)
+
+banned_items <- read.csv("https://raw.githubusercontent.com/the-pudding/data/master/dress-codes/banned_items.csv", stringsAsFactors = FALSE)
+
+banned_item_frequency <- banned_items %>% 
+  group_by(item) %>% 
+  summarise(how_many_schools_banned_this_item = n()) %>%
+  arrange(desc(how_many_schools_banned_this_item))
+
+print(banned_item_frequency, n = 30)
+
+```
+
 ## Chart 1
+Bar Chart displaying the top 10 banned items in high schools across the US, showing which items were most commonly banned. The chart shows that items generally attributed to banned substances or general terms were most frequently banned, such as "alcohol", "drugs", or items relating to "disruption/distraction". 
+
 ```{r, echo=FALSE}
 # Percentage of schools for each of the top 10 banned items
 library(tidyverse)
@@ -95,6 +111,7 @@ ggplot(top10, aes(x = reorder(item, -total), y = total, fill = item)) +
 ```
 
 ## Chart 2
+Wordcloud comparing frequency of terms used to describe or justify banned items. The different text sizes correlate with the frequency of the term/phrase being used, with "disruption/distraction", "safe/safety", and "appropriate/innapropriate" being used the most. The most frequently used terms are all general terms and ambiguous in relation to clothing items.
 ```{r, echo=FALSE}
 # Word cloud for different banned items
 
@@ -109,6 +126,7 @@ ggplot(words_percentages_db, aes(label = item, size = percent)) +
 ```
 
 ## Chart 3
+Treemap intended to highlight the difference in frequency of items banned for male and female clothing, as well as for non-gendered clothing. The treemap shows the drastic difference between female and male banned items, with the female block being much larger.
 ```{r, echo=FALSE}
 # Treemap comparing banned items between genders
 
@@ -127,4 +145,3 @@ ggplot(by_gender, aes(area = total, fill = market, label = market)) +
   ggtitle("Treemap showing proportion between banned male, female, and non-gendered \nclothing items")
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
