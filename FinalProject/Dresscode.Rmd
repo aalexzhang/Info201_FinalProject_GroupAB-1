@@ -61,6 +61,8 @@ Moreover, students’ ideas of the dressing code can also be critical in our pro
 
 ## Summary Information
 
+Alcohol has the highest count of school that ban it. It is surprising to learn that female students are subjected to 95% of the banned items, while male students are subjected to only 47.5% of the banned items. This means that there are much more dresscode restrictions that refer to female students than male students. The most banned body part is the midsection, also known as the midriff. "Distract or disrupt" has the highest count of schools that use these two words to describe the rationale that the dress code exists or that a specific item is prohibited.
+
 ```{r,warning=FALSE, message=FALSE,  echo=FALSE}
 library(tidyverse)
 
